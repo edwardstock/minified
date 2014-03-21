@@ -27,14 +27,6 @@ return [
 		    'enablePrettyUrl'=>true,
 	    ],
 
-	    'db' => [
-		    'class' => 'yii\db\Connection',
-		    'dsn' => 'mysql:host=localhost;dbname=minified',
-		    'username' => 'edward',
-		    'password' => 'Subwoofer2112',
-		    'charset' => 'utf8',
-	    ],
-
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [
