@@ -8,42 +8,15 @@ $params = array_merge(
 
 return [
 	'name'=>'MINIFIED.pw',
-    'id' => 'app-frontend',
+    'id' => 'app-api',
     'basePath' => dirname(__DIR__),
-    'controllerNamespace' => 'frontend\controllers',
+    'controllerNamespace' => 'api\controllers',
 	'preload'=>['log','debug'],
 
 	'language' => 'en_US',
 	'sourceLanguage' => 'en_US',
 
     'components' => [
-
-	    'minified'=> [
-		    'class'=> EdwardStock\Minified\MinifiedClient::class,
-		    'username'=>'admin',
-		    'token'=>'21232f297a57a5a743894a0e4a801fc3',
-		    'jsCompilationLevel'=>EdwardStock\Minified\MinifiedClient::COMPILATION_LEVEL_SIMPLE_OPTIMIZATION,
-		    'jsSpecification'=>EdwardStock\Minified\MinifiedClient::SPEC_DEFAULT_ECMASCRIPT3,
-		    'yiiDebug'=>YII_DEBUG,
-		    'combineCss'=>false,
-		    'combineJs'=>false,
-		    'recursiveJsScan'=>true,
-		    'recursiveCssScan'=>true,
-		    'assetsDepends'=> [
-				//for example like this
-			    yii\web\YiiAsset::class,
-			    yii\bootstrap\BootstrapAsset::class,
-		    ],
-		    'sourceJsPaths'=>[
-			    //your js path
-			    \Yii::getAlias('@frontend/web/js')
-		    ],
-		    'sourceCssPaths'=>[
-			    //your css path
-			    \Yii::getAlias('@frontend/web/css')
-		    ],
-	    ],
-
         'user' => [
             'identityClass' => frontend\modules\user\models\User::class,
             'enableAutoLogin' => true,
@@ -51,8 +24,11 @@ return [
         ],
 
 	    'urlManager'=>[
-		    'class'=>yii\web\UrlManager::class,
+		    'class'=>\yii\web\UrlManager::class,
 		    'enablePrettyUrl'=>true,
+		    'rules'=>[
+			    'user/auth'=>'rest/auth'
+		    ],
 	    ],
 
         'log' => [
@@ -62,10 +38,14 @@ return [
                     'class' => \yii\log\FileTarget::class,
                     'levels' => ['trace', 'info', 'error', 'warning'],
                 ],
+	            [
+		            'class' => \yii\log\DbTarget::class,
+		            'levels' => ['warning','error'],
+	            ],
             ],
         ],
         'errorHandler' => [
-            'errorAction' => 'site/error',
+            'errorAction' => 'rest/error',
         ],
 
 	    'i18n'=>[
@@ -85,20 +65,20 @@ return [
     ],
 
 	'modules'=>[
-		'user' => [
-			'class' => frontend\modules\user\Module::class,
-		],
-		'storage'=>[
-			'class' => frontend\modules\storage\Module::class,
-		],
+//		'user' => [
+//			'class' => \frontend\modules\user\Module::class,
+//		],
+//		'storage'=>[
+//			'class' => \frontend\modules\storage\Module::class,
+//		],
 
 		'debug'=>[
-			'class'=>yii\debug\Module::class,
+			'class'=>\yii\debug\Module::class,
 			'allowedIPs'=>['*','::1'],
 		],
 
 		'gii'=>[
-			'class'=>yii\gii\Module::class,
+			'class'=>\yii\gii\Module::class,
 			'allowedIPs'=>['*','::1'],
 		],
 	],

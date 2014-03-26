@@ -20,43 +20,29 @@ AppAsset::register($this);
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
+	<?=$this->registerCssFile('/css/style.css')?>
 </head>
 <body>
+<?php
+$profiling = microtime(true);
+\Yii::$app->minified->prepare()->rock($this);
+$profiling = microtime(true) - $profiling;
+\Yii::info("Profiling: ".number_format($profiling,3).' seconds', 'MINIFIED EXTENSION');
+?>
     <?php $this->beginBody() ?>
     <div class="wrap">
         <?php
-            NavBar::begin([
-                'brandLabel' => 'MINIFIED.pw',
-                'brandUrl' => Yii::$app->homeUrl,
-                'options' => [
-                    'class' => 'navbar-inverse navbar-fixed-top',
-                ],
-            ]);
-            $menuItems = [
-                ['label' => 'Home', 'url' => ['/site/index']],
-                ['label' => 'About', 'url' => ['/site/about']],
-                ['label' => 'Contact', 'url' => ['/site/contact']],
-            ];
-            if (Yii::$app->user->isGuest) {
-                $menuItems[] = ['label' => 'Signup', 'url' => ['/user/auth/signup']];
-                $menuItems[] = ['label' => 'Login', 'url' => ['/user/auth/login']];
-            } else {
-                $menuItems[] = [
-                    'label' => 'Logout (' . Yii::$app->user->identity->username . ')',
-                    'url' => ['/site/logout'],
-                    'linkOptions' => ['data-method' => 'post']
-                ];
-            }
-            echo Nav::widget([
-                'options' => ['class' => 'navbar-nav navbar-right'],
-                'items' => $menuItems,
-            ]);
-            NavBar::end();
+            echo $this->render('@app/views/layouts/menu');
+
+            if(\Yii::$app->user->isGuest === false)
+                echo $this->render('@app/views/layouts/user_menu');
         ?>
 
-        <div class="container">
+        <div class="container main-workspace">
         <?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+	        'id'=>'breadcrumbs',
+	       // 'separator'=>'<span class="b-sep"> :: </span>'
         ]) ?>
         <?= Alert::widget() ?>
         <?= $content ?>
@@ -65,8 +51,8 @@ AppAsset::register($this);
 
     <footer class="footer">
         <div class="container">
-        <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
-        <p class="pull-right"><?= Yii::powered() ?></p>
+        <p class="pull-left">&copy; <strong>MINIFIED.pw</strong> | <a target="_blank" href="http://redstardesign.ru">RED STAR DESIGN</a> <?= date('Y') ?></p>
+        <p class="pull-right">Powered by Yii Framework, Yahoo, Oracle</p>
         </div>
     </footer>
 
